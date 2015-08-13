@@ -21,17 +21,27 @@ function onSignIn(googleUser) {
   if (typeof image === 'undefined'){
     image = "";
   }
-  //should really fix cors later... lol
-  $.post("https://cors.io?u=https://nileswest.herokuapp.com/login?secret_key=DEVISING&email="+email+"&name="+profile.getName()+"&image="+image, {dataType:'jsonp'});
+  $.post("https://nileswest.herokuapp.com/login?secret_key=DEVISING&email="+email+"&name="+profile.getName()+"&image="+image, {dataType:'jsonp'});
+  $.get("https://nileswest.herokuapp.com/tutees?secret_key=DEVISING").done(function(r){addTuteesToScreen(r.responseText)});
+}
+function addTuteesToScreen(str){
+str = str.split("|");
+$(".tutee-list").empty();
+for(var i = 0; i < str.length - 1; i += 2){
+var name = str[i];
+var subject = str[i+1];
+$(".tutee-list").append("<div>"+name+"::"+subject+"</div>");
+}
 }
 function switchClicked(switchButton){
 var status = (switchButton.clicked ? 1 : 2);
-$.post("https://cors.io?u=https://nileswest.herokuapp.com/change_status?secret_key=DEVISING&email="+email+"&status="+status);
+$.post("https://nileswest.herokuapp.com/change_status?secret_key=DEVISING&email="+email+"&status="+status);
 }
 </script>
 </head>
 <body>
 <div class="g-signin2" data-onsuccess="onSignIn"></div>
+<div class="tutee-list"></div>
 <label id="switch" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-2">
   <input type="checkbox" id="switch-2" class="mdl-switch__input" onclick="switchClicked(this)"/>
   <span class="mdl-switch__label"></span>

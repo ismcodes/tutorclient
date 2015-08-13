@@ -8,28 +8,32 @@
 <script src="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.min.js"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <script>
+var email;
 function onSignIn(googleUser) {
   var profile = googleUser.getBasicProfile();
   console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
   console.log('Name: ' + profile.getName());
   console.log('Image URL: ' + profile.getImageUrl());
   console.log('Email: ' + profile.getEmail());
+  email = profile.getEmail();
   var name = encodeURI(profile.getName());
   var image = encodeURI(profile.getImageUrl());
-  if (image === 'undefined'){
+  if (typeof image === 'undefined'){
     image = "";
   }
-  $.post("https://nileswest.herokuapp.com/login?secret_key=DEVISING&email="+profile.getEmail()+"&name="+profile.getName()+"&image="+image, {dataType:'jsonp'});
+  //should really fix cors later... lol
+  $.post("https://cors.io?u=https://nileswest.herokuapp.com/login?secret_key=DEVISING&email="+email+"&name="+profile.getName()+"&image="+image, {dataType:'jsonp'});
 }
 function switchClicked(switchButton){
-console.log(switchButton);
+var status = (switchButton.clicked ? 1 : 2);
+$.post("https://cors.io?u=https://nileswest.herokuapp.com/change_status?secret_key=DEVISING&email="+email+"&status="+status);
 }
 </script>
 </head>
 <body>
 <div class="g-signin2" data-onsuccess="onSignIn"></div>
 <label id="switch" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-2">
-  <input type="checkbox" id="switch-2" class="mdl-switch__input" onclick="switchClicked"/>
+  <input type="checkbox" id="switch-2" class="mdl-switch__input" onclick="switchClicked(this)"/>
   <span class="mdl-switch__label"></span>
 </label>
 </body>

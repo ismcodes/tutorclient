@@ -26,13 +26,20 @@ function onSignIn(googleUser) {
   //lol... clean this up later
   //should not be running fail
 }
+function claim(tuteeElement){
+var ns = tuteeElement.innerHTML.split("::");
+var name = ns[0];
+var subject = ns[1];
+$.post("https://nileswest.herokuapp.com/resolve?secret_key=DEVISING&email="+email+"&name="+name+"&subject="+subject);
+$("#switch").click();
+}
 function addTuteesToScreen(str){
 str = str.split("|");
 $(".tutee-list").empty();
 for(var i = 0; i < str.length - 1; i += 2){
 var name = str[i];
 var subject = str[i+1];
-$(".tutee-list").append("<div>"+name+"::"+subject+"</div>");
+$(".tutee-list").append("<div onclick='claim(this)'>"+name+"::"+subject+"</div>");
 }
 }
 function switchClicked(switchButton){

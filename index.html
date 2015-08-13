@@ -16,7 +16,10 @@ function onSignIn(googleUser) {
   console.log('Email: ' + profile.getEmail());
   var name = encodeURI(profile.getName());
   var image = encodeURI(profile.getImageUrl());
-  $.post("https://nileswest.herokuapp.com/login?secret_key=DEVISING&email="+profile.getEmail()+"&name="+profile.getName()+"&image="+image);
+  if (image === 'undefined'){
+    image = "";
+  }
+  $.post("https://nileswest.herokuapp.com/login?secret_key=DEVISING&email="+profile.getEmail()+"&name="+profile.getName()+"&image="+image, {dataType:'jsonp'});
 }
 function switchClicked(switchButton){
 console.log(switchButton);

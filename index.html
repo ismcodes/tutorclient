@@ -36,7 +36,7 @@ $(".tutee-list").append("<div>"+name+"::"+subject+"</div>");
 }
 }
 function switchClicked(switchButton){
-if (switchButton.clicked) {
+if (switchButton.checked) {
 $(".tutee-list").empty();
 $.post("https://nileswest.herokuapp.com/change_status?secret_key=DEVISING&email="+email+"&status=1");
 }

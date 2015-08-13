@@ -3,8 +3,31 @@
 <head>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <meta name="google-signin-client_id" content="492971078631-2ue0vc5aik73kdmq5fitt67ro7de5q55.apps.googleusercontent.com">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.indigo-pink.min.css">
+<script src="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<script>
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log('Name: ' + profile.getName());
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail());
+  var name = encodeURI(profile.getName());
+  var image = encodeURI(profile.getImageUrl());
+  $.post("https://nileswest.herokuapp.com/login?secret_key=DEVISING&email="+profile.getEmail()+"&name="+profile.getName()+"&image="+image);
+}
+function switchClicked(switchButton){
+console.log(switchButton);
+}
+</script>
 </head>
 <body>
 <div class="g-signin2" data-onsuccess="onSignIn"></div>
+<label id="switch" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-2">
+  <input type="checkbox" id="switch-2" class="mdl-switch__input" onclick="switchClicked"/>
+  <span class="mdl-switch__label"></span>
+</label>
 </body>
 </html>

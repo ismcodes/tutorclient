@@ -22,7 +22,9 @@ function onSignIn(googleUser) {
     image = "";
   }
   $.post("https://nileswest.herokuapp.com/login?secret_key=DEVISING&email="+email+"&name="+profile.getName()+"&image="+image, {dataType:'jsonp'});
-  $.get("https://nileswest.herokuapp.com/tutees?secret_key=DEVISING").done(function(r){addTuteesToScreen(r.responseText)});
+  $.get("https://nileswest.herokuapp.com/tutees?secret_key=DEVISING").fail(function(r){addTuteesToScreen(r.responseText)});
+  //lol... clean this up later
+  //should not be running fail
 }
 function addTuteesToScreen(str){
 str = str.split("|");
@@ -34,8 +36,14 @@ $(".tutee-list").append("<div>"+name+"::"+subject+"</div>");
 }
 }
 function switchClicked(switchButton){
-var status = (switchButton.clicked ? 1 : 2);
-$.post("https://nileswest.herokuapp.com/change_status?secret_key=DEVISING&email="+email+"&status="+status);
+if (switchButton.clicked) {
+$(".tutee-list").empty();
+$.post("https://nileswest.herokuapp.com/change_status?secret_key=DEVISING&email="+email+"&status=1");
+}
+else {
+ $.get("https://nileswest.herokuapp.com/tutees?secret_key=DEVISING").fail(function(r){addTuteesToScreen(r.responseText)});
+$.post("https://nileswest.herokuapp.com/change_status?secret_key=DEVISING&email="+email+"&status=2");
+}
 }
 </script>
 </head>
